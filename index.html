@@ -1,1 +1,119 @@
-[{"key":1,"text":"111"},{"key":2,"text":"222"},{"key":3,"text":"333"},{"key":4,"text":"444"},{"key":5,"text":"555"}]
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>BigVideo.js - The jQuery Plugin for Big Background Video</title>
+    <meta name="description" content="BigVideo.js - The jQuery Plugin for Big Background Video" />
+    <meta name="author" content="John Polacek" />
+    <meta name="viewport" content="width=device-width">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:900&text=ABCDEFGHIJKLMNOPQRSTUVWXYZ' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://dfcb.github.io/BigVideo.js/css/style.css">
+    <link rel="stylesheet" href="http://dfcb.github.io/BigVideo.js/bower_components/BigVideo/css/bigvideo.css">
+    <script src="http://dfcb.github.io/BigVideo.js/bower_components/modernizr/modernizr-2.5.3.min.js"></script>
+</head>
+<body>
+    <div class="nav box">
+        <ul class="video-list">
+            <li><a href="http://moodle.tcavs.tc.edu.tw/moodle/pluginfile.php/23250/mod_resource/content/1/%E4%B8%8B%E8%BC%89%E7%AF%84%E4%BE%8B%E6%AA%94%E6%A1%88/tpzoo.mp4" class="playlist-btn">Video #1</a></li>
+            <li><a href="http://gallery.mjes.ntpc.edu.tw/moodle/pluginfile.php/15477/mod_resource/content/3/4%E6%98%9F%E6%98%9F%E4%B8%80%E5%A4%A9%E7%9A%84%E9%81%8B%E8%A1%8C%20%281%29.mp4" class="playlist-btn">Video #2</a></li>
+            <li><a href="http://dfcb.github.io/BigVideo.js/vids/frontier.mp4" class="playlist-btn">Video #3</a></li>
+        </ul>
+    </div>
+    <!-- BigVideo Dependencies -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="bower_components/jquery/jquery.min.js"><\/script>')</script>
+    <script src="http://dfcb.github.io/BigVideo.js/bower_components/jquery-ui/ui/jquery-ui.js"></script>
+    <script src="http://dfcb.github.io/BigVideo.js/bower_components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script src="http://vjs.zencdn.net/4.3/video.js"></script>
+    <script src="http://dfcb.github.io/BigVideo.js/bower_components/eventEmitter/EventEmitter.min.js"></script>
+    <script src="http://dfcb.github.io/BigVideo.js/bower_components/eventie/eventie.js"></script>
+    <script src="http://dfcb.github.io/BigVideo.js/bower_components/imagesloaded/imagesloaded.js"></script>
+
+    <!-- BigVideo -->
+    <script src="http://dfcb.github.io/BigVideo.js/bower_components/BigVideo/lib/bigvideo.js"></script>
+
+    <!-- Demo -->
+    <script>
+        $(function() {
+
+            // Use Modernizr to detect for touch devices, 
+            // then serve them alternate background image content
+            var isTouch = Modernizr.touch;
+            
+            // vars for auto hiding
+            var isShowingPlaylist = false;
+            var isHidden = false;
+            var autoHideTimer;
+            var $showContentButton = $('<div class="touchscreen-show-button box">Back</div>')
+            
+            // initialize BigVideo
+            var BV = new $.BigVideo({forceAutoplay:isTouch});
+            BV.init();
+            // show background image
+            BV.show('img/background-dock.jpg');
+
+            // Playlist button click starts video, enables autohiding
+            $('.playlist-btn').on('click', function(e) {
+                e.preventDefault();
+                BV.show($(this).attr('href'));
+                autoHide(true);
+                isShowingPlaylist = true;
+            })
+			
+			$( "body" ).on( "keydown", function( event ) {
+			  if(event.which === 65){
+				BV.show('http://moodle.tcavs.tc.edu.tw/moodle/pluginfile.php/23250/mod_resource/content/1/%E4%B8%8B%E8%BC%89%E7%AF%84%E4%BE%8B%E6%AA%94%E6%A1%88/tpzoo.mp4');
+				autoHide(true);
+				isShowingPlaylist = true;
+			  }else if(event.which === 66){
+				BV.show('http://gallery.mjes.ntpc.edu.tw/moodle/pluginfile.php/15477/mod_resource/content/3/4%E6%98%9F%E6%98%9F%E4%B8%80%E5%A4%A9%E7%9A%84%E9%81%8B%E8%A1%8C%20%281%29.mp4');
+				autoHide(true);
+				isShowingPlaylist = true;
+			  }else if(event.which === 67){
+				BV.show('http://dfcb.github.io/BigVideo.js/vids/frontier.mp4');
+				autoHide(true);
+				isShowingPlaylist = true;
+			  }
+			});
+
+            // Turn off autohiding when mouse is over the nav 
+            // (not necessary for touchscreens)
+            if (!isTouch) {
+                $('.nav')
+                    .on('mouseover', function() {
+                        if (isShowingPlaylist) autoHide(false);
+                    })
+                    .on('mouseout', function() {
+                        if (isShowingPlaylist) autoHide(true);
+                    });
+            } else {
+                // add button to show content on touchscreen
+                $('body').prepend($showContentButton);
+            }
+
+            function autoHide(enable) {
+                if (enable) {
+                    isHidden = true;
+                    $('body').on('mousemove', function(event){
+                        if (isHidden) {
+                            isHidden = false;
+                            $('.nav, .main').removeClass('transparent');
+                        }
+                        clearTimeout(autoHideTimer);
+                        autoHideTimer = setTimeout(function() {
+                            isHidden = true;
+                            $('.nav, .main').addClass('transparent');
+                        }, 1000);
+                    });    
+                } else {
+                    clearTimeout(autoHideTimer);
+                    $('body').off('mousemove');
+                    $('.nav, .main').removeClass('transparent');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
