@@ -64,15 +64,15 @@
 			
 			$( "body" ).on( "keydown", function( event ) {
 			  if(event.which === 65){
-				BV.show('http://moodle.tcavs.tc.edu.tw/moodle/pluginfile.php/23250/mod_resource/content/1/%E4%B8%8B%E8%BC%89%E7%AF%84%E4%BE%8B%E6%AA%94%E6%A1%88/tpzoo.mp4');
+				BV.show('http://moodle.tcavs.tc.edu.tw/moodle/pluginfile.php/23250/mod_resource/content/1/%E4%B8%8B%E8%BC%89%E7%AF%84%E4%BE%8B%E6%AA%94%E6%A1%88/tpzoo.mp4',{preload:true});
 				autoHide(true);
 				isShowingPlaylist = true;
 			  }else if(event.which === 66){
-				BV.show('http://gallery.mjes.ntpc.edu.tw/moodle/pluginfile.php/15477/mod_resource/content/3/4%E6%98%9F%E6%98%9F%E4%B8%80%E5%A4%A9%E7%9A%84%E9%81%8B%E8%A1%8C%20%281%29.mp4');
+				BV.show('http://gallery.mjes.ntpc.edu.tw/moodle/pluginfile.php/15477/mod_resource/content/3/4%E6%98%9F%E6%98%9F%E4%B8%80%E5%A4%A9%E7%9A%84%E9%81%8B%E8%A1%8C%20%281%29.mp4',{preload:true});
 				autoHide(true);
 				isShowingPlaylist = true;
 			  }else if(event.which === 67){
-				BV.show('http://dfcb.github.io/BigVideo.js/vids/frontier.mp4');
+				BV.show('http://dfcb.github.io/BigVideo.js/vids/frontier.mp4',{preload:true});
 				autoHide(true);
 				isShowingPlaylist = true;
 			  }
